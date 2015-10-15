@@ -4,12 +4,13 @@ import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 
+import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 
-class DuplexDots extends WebSocketServer {
+class Server extends WebSocketServer {
 
-    public DuplexDots() throws UnknownHostException {
-
+    public Server(InetSocketAddress address) {
+        super(address);
     }
 
     @Override
@@ -24,7 +25,10 @@ class DuplexDots extends WebSocketServer {
 
     @Override
     public void onMessage(WebSocket webSocket, String s) {
-        for(WebSocket ws : this.connections.
+        for(WebSocket ws : this.connections()){
+            if(!webSocket.equals(ws))
+                ws.send(s);
+        }
     }
 
     @Override
